@@ -23,11 +23,7 @@ const FindSystem = () => {
           <tbody>
             {systems.map((system) => (
               <SystemCard
-                description={system.description}
-                acronym={system.acronym}
-                systemEmail={system.systemEmail}
-                status={system.status}
-                url={system.url}
+                system={system}
                 key={system.id}
               />
             ))}

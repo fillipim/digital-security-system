@@ -1,17 +1,20 @@
-import { ICardSystem } from "../../interfaces";
-import { FaPenAlt } from "react-icons/fa"
+import { ICardSystem, ISystem } from "../../interfaces";
+import { FaPenAlt } from "react-icons/fa";
 
-
-const SystemCard = ({description, status, systemEmail, acronym}: ICardSystem) => {
-    return(
-        <tr>
-            <td>{description}</td>
-            <td>{acronym}</td>
-            <td>{systemEmail}</td>
-            <td>{status}</td>
-            <td><button><FaPenAlt/></button></td>
-        </tr>
-    )
+const SystemCard = ({ system }: {system: ISystem}) => {
+  return (
+    <tr>
+      <td>{system.description}</td>
+      <td>{system.acronym}</td>
+      <td>{system.systemEmail}</td>
+      <td>{system.status}</td>
+      <td>
+        <button>
+          <FaPenAlt />
+        </button>
+      </td>
+    </tr>
+  );
 };
 
 export default SystemCard;
