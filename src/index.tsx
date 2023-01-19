@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "styled-components";
 import SystemProvider from "./contexts/SystemContext";
 import MainRoutes from "./routes";
 import { GlobalStyles } from "./styles/globla";
 import theme from "./styles/theme";
+import "react-toastify/dist/ReactToastify.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -13,6 +15,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+    <ToastContainer
+    position="top-center"
+    closeOnClick={true}
+    theme="dark"/>
       <ThemeProvider theme={theme}>
         <SystemProvider>
           <GlobalStyles />

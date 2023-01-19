@@ -8,9 +8,12 @@ import { Input } from "../Input/input.style";
 import * as S from "./searchSystemForm.style";
 import { Text } from "../../styles/typography";
 import { FaSearch, FaTrash, FaFolderPlus} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const FindSystemForm = () => {
   const { handleSearchData, setSystems } = useSystemContext();
+
+  const navigate = useNavigate()
 
   const {
     register,
@@ -37,7 +40,7 @@ const FindSystemForm = () => {
         E-mail de atendimento do sistema:
         <Input type="text" {...register("systemEmail")} />
       </label>
-      <S.BoxButtons>
+      <S.BoxButtons content="end">
         <button>
           Procurar <FaSearch />
         </button>
@@ -50,7 +53,11 @@ const FindSystemForm = () => {
           Limpar
           <FaTrash />
         </button>
-        <button>
+        <button 
+        onClick={(e) => {
+            e.preventDefault();
+            navigate("/createSystem");
+          }}>
           Novo Sistema <FaFolderPlus />
         </button>
       </S.BoxButtons>

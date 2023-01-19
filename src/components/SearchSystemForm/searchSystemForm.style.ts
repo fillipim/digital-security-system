@@ -10,12 +10,15 @@ export const Form = styled.form`
     margin-bottom: 1rem;
     color: #00b679;
   }
+  span{
+    color: red;
+  }
 `;
 
-export const BoxButtons = styled.div`
+export const BoxButtons = styled.div<{content: string}>`
   width: 100%;
   display: flex;
-  justify-content: end;
+  justify-content: ${({content}) => content};
   margin-bottom: 1rem;
   button{
     margin: 0 1rem;
