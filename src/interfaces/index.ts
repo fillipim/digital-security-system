@@ -1,5 +1,3 @@
-import exp from "constants";
-
 export interface ISearchSystem {
   description?: string;
   acronym?: string;
@@ -25,8 +23,17 @@ export interface ISystem {
 export interface ISystemContext {
   systems: ISystem[] | null;
   setSystems: React.Dispatch<React.SetStateAction<ISystem[] | null >>;
-  handleSearchData: (searchData: ISearchSystem) => void;
-  createSystem: (data: ICreateSystem) => void
+  // handleSearchData: (searchData: ISearchSystem) => void;
+  createSystem: (data: ICreateSystem) => void;
+  currentSystem: ISystem;
+  setCurrentSystem: React.Dispatch<React.SetStateAction<ISystem>>;
+  updateSystem: (payload: IUpdateSystem) => void;
+  backToHome: () => void;
+  searchData: ISearchSystem | null;
+  setSearchData: React.Dispatch<React.SetStateAction<ISearchSystem | null>>;
+  offset: number;
+  setOffset: React.Dispatch<React.SetStateAction<number>>;
+  findSystems: () => void;
 }
 
 export interface ICardSystem {
@@ -41,4 +48,15 @@ export interface ICreateSystem {
   description: string;
   acronym: string;
   systemEmail?: string;
+}
+
+export interface IUpdateSystem {
+  description: string;
+  acronym: string;
+  systemEmail?: string | null;
+  url?: string;
+  status: string | null;
+  lastChangeUser: string | null;
+  justificationChange: string | null;
+  updatedAt?: Date
 }

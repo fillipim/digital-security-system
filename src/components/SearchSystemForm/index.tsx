@@ -7,61 +7,78 @@ import { ISearchSystem } from "../../interfaces";
 import { Input } from "../Input/input.style";
 import * as S from "./searchSystemForm.style";
 import { Text } from "../../styles/typography";
-import { FaSearch, FaTrash, FaFolderPlus} from "react-icons/fa";
+import { FaSearch, FaTrash, FaFolderPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Form } from "../Form/form.style";
+import { FieldBox } from "../Container/container.style";
+import { FormEvent } from "react";
 
 const FindSystemForm = () => {
-  const { handleSearchData, setSystems } = useSystemContext();
+  const { setSystems, setSearchData, findSystems} = useSystemContext();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<ISearchSystem>({
     resolver: yupResolver(searchSystemSchema),
   });
 
+  const handleSearchData = (searchData: ISearchSystem) => {
+    setSearchData(searchData)
+    findSystems()
+  }
+
+  const clearSearchReult = (e: FormEvent) => {
+    e.preventDefault()
+    setSystems(null)
+  }
+
   return (
-    <S.Form onSubmit={handleSubmit(handleSearchData)}>
-      <Text tag={2} size="size2">
-        Filtros de Consulta
+    <>
+      <Text tag={2} size="size1">
+        Pesquisar Sistema
       </Text>
-      <label>
-        Descrição:
-        <Input type="text" {...register("description")} />
-      </label>
-      <label>
-        Sigla:
-        <Input type="text" {...register("acronym")} />
-      </label>
-      <label>
-        E-mail de atendimento do sistema:
-        <Input type="text" {...register("systemEmail")} />
-      </label>
-      <S.BoxButtons content="end">
-        <button>
-          Procurar <FaSearch />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            setSystems([]);
-          }}
-        >
-          Limpar
-          <FaTrash />
-        </button>
-        <button 
-        onClick={(e) => {
-            e.preventDefault();
-            navigate("/createSystem");
-          }}>
-          Novo Sistema <FaFolderPlus />
-        </button>
-      </S.BoxButtons>
-    </S.Form>
+      <FieldBox>
+        <Form onSubmit={handleSubmit(handleSearchData)}>
+            <Text tag={3} size="size2">
+              Filtros de Consulta
+            </Text>
+            <label>
+              Descrição:
+              <Input type="text" {...register("description")} />
+            </label>
+            <label>
+              Sigla:
+              <Input type="text" {...register("acronym")} />
+            </label>
+            <label>
+              E-mail de atendimento do sistema:
+              <Input type="text" {...register("systemEmail")} />
+            </label>
+            <S.BoxButtons content="end">
+              <button>
+                Procurar <FaSearch />
+              </button>
+              <button
+                onClick={clearSearchReult}
+              >
+                Limpar
+                <FaTrash />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/createSystem");
+                }}
+              >
+                Novo Sistema <FaFolderPlus />
+              </button>
+            </S.BoxButtons>
+        </Form>
+      </FieldBox>
+    </>
   );
 };
 

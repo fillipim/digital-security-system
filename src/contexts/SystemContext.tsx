@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   ICreateSystem,
@@ -6,17 +7,26 @@ import {
   ISystem,
   ISystemContext,
   ISystemContextProps,
+  IUpdateSystem,
 } from "../interfaces";
-import { createSystemSchema } from "../schemas/createSystem.schema";
+import {
+  createSystemSchema,
+  validateEmail,
+} from "../schemas/createSystem.schema";
+import { updateSystemSchema } from "../schemas/updateSystem.schema";
 import api from "../services/api";
 
 const SystemContext = createContext({} as ISystemContext);
 
 const SystemProvider = ({ children }: ISystemContextProps) => {
   const [systems, setSystems] = useState<ISystem[] | null>(null);
-  const [offset, setOffset] = useState<number | null>(0);
+  const [offset, setOffset] = useState<number >(0);
+  const [currentSystem, setCurrentSystem] = useState<ISystem>({} as ISystem);
+  const [searchData, setSearchData] = useState<ISearchSystem | null>(null)
 
-  const handleSearchData = async (searchData: ISearchSystem) => {
+  const navigate = useNavigate()
+
+  const findSystems = async () => {
     const response = await api
       .get("/systems", { params: { ...searchData, offset: offset } })
       .then((res) => res.data)
@@ -31,6 +41,10 @@ const SystemProvider = ({ children }: ISystemContextProps) => {
     setSystems(response);
   };
 
+  useEffect(() => {
+    findSystems()
+  },[offset])
+
   const createSystem = async (data: ICreateSystem) => {
     await createSystemSchema
       .validate(data)
@@ -44,8 +58,44 @@ const SystemProvider = ({ children }: ISystemContextProps) => {
     }
   };
 
+  const updateSystem = (payload: IUpdateSystem) => {
+    updateSystemSchema
+      .validate(payload)
+      .catch((err) => toast.error("Dados obrigatórios não informados."));
+
+    if (payload.systemEmail) {
+      validateEmail
+        .validate(payload.systemEmail)
+        .catch((err) => toast.error("Email inválido!"));
+    }
+
+    api.patch(`/systems/${currentSystem.id}`, {
+      ...payload,
+      updatedAt: new Date(),
+    });
+  };
+
+  const backToHome = () => {
+    navigate("/")
+  }
+
   return (
-    <SystemContext.Provider value={{ systems, setSystems, handleSearchData , createSystem}}>
+    <SystemContext.Provider
+      value={{
+        systems,
+        setSystems,
+        createSystem,
+        setCurrentSystem,
+        currentSystem,
+        updateSystem,
+        backToHome,
+        searchData,
+        setSearchData,
+        offset,
+        setOffset,
+        findSystems
+      }}
+    >
       {children}
     </SystemContext.Provider>
   );

@@ -1,7 +1,17 @@
-import { ICardSystem, ISystem } from "../../interfaces";
+import { ISystem } from "../../interfaces";
 import { FaPenAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { useSystemContext } from "../../contexts/SystemContext";
 
-const SystemCard = ({ system }: {system: ISystem}) => {
+const SystemCard = ({ system }: { system: ISystem }) => {
+  const { setCurrentSystem } = useSystemContext();
+
+  const navigate = useNavigate();
+
+  const handleSystem = () => {
+    setCurrentSystem(system)
+    navigate("updateSystem")
+  };
   return (
     <tr>
       <td>{system.description}</td>
@@ -9,7 +19,7 @@ const SystemCard = ({ system }: {system: ISystem}) => {
       <td>{system.systemEmail}</td>
       <td>{system.status}</td>
       <td>
-        <button>
+        <button onClick={handleSystem}>
           <FaPenAlt />
         </button>
       </td>

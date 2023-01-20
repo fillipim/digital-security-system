@@ -1,60 +1,57 @@
 import { useForm } from "react-hook-form";
+import { useSystemContext } from "../../contexts/SystemContext";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Input } from "../Input/input.style";
 import { Text } from "../../styles/typography";
-
+import { Form } from "../Form/form.style";
 import { FaFolderPlus, FaArrowLeft } from "react-icons/fa";
 import * as S from "../SearchSystemForm/searchSystemForm.style";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { createSystemSchema } from "../../schemas/createSystem.schema";
 import { ICreateSystem } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
-import { useSystemContext } from "../../contexts/SystemContext";
+import { Container, FieldBox } from "../Container/container.style";
 
 const CreateSystemForm = () => {
+  const { createSystem, backToHome } = useSystemContext();
 
-    const { createSystem } = useSystemContext()
-
-  const navigate = useNavigate();
-
-  const {
-    register,
-    handleSubmit,
-  } = useForm<ICreateSystem>({
+  const { register, handleSubmit } = useForm<ICreateSystem>({
     resolver: yupResolver(createSystemSchema),
   });
 
   return (
-    <S.Form onSubmit={handleSubmit(createSystem)}>
-      <Text tag={2} size="size2">
-        Novo Sistema
+    <Container>
+      <Text tag={2} size="size1">
+        Novo sistema
       </Text>
-      <label>
-        Descrição <span>*</span>:
-        <Input type="text" {...register("description")} />
-      </label>
-      <label>
-        Sigla <span>*</span>:
-        <Input type="text" {...register("acronym")} />
-      </label>
-      <label>
-        E-mail de atendimento do sistema:
-        <Input type="text" {...register("systemEmail")} />
-      </label>
-      <S.BoxButtons content="space-between">
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            navigate("/");
-          }}
-        >
-          <FaArrowLeft />
-        </button>
-        <button>
-          Salvar <FaFolderPlus />
-        </button>
-      </S.BoxButtons>
-    </S.Form>
+      <FieldBox>
+        <Text tag={3} size="size2">
+          Dasos do sistema
+        </Text>
+        <Form onSubmit={handleSubmit(createSystem)}>
+          <label>
+            Descrição <span>*</span>:
+            <Input type="text" {...register("description")} />
+          </label>
+          <label>
+            Sigla <span>*</span>:
+            <Input type="text" {...register("acronym")} />
+          </label>
+          <label>
+            E-mail de atendimento do sistema:
+            <Input type="text" {...register("systemEmail")} />
+          </label>
+          <S.BoxButtons content="space-between">
+            <button onClick={backToHome}>
+              <FaArrowLeft />
+            </button>
+            <button>
+              Salvar <FaFolderPlus />
+            </button>
+          </S.BoxButtons>
+        </Form>
+      </FieldBox>
+    </Container>
   );
 };
 
