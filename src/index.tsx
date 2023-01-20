@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "styled-components";
 import SystemProvider from "./contexts/SystemContext";
 import MainRoutes from "./routes";
-import { GlobalStyles } from "./styles/globla";
+import { GlobalStyles } from "./styles/globlal";
 import theme from "./styles/theme";
 import "react-toastify/dist/ReactToastify.css";
 

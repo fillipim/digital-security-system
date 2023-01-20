@@ -1,14 +1,15 @@
+import { Outlet } from "react-router-dom";
 import FindSystemForm from "../../components/SearchSystemForm/";
 import SystemCard from "../../components/systemCard";
 import { useSystemContext } from "../../contexts/SystemContext";
 import * as S from "./style";
 
-const FindSystem = () => {
+const Home = () => {
   const { systems } = useSystemContext();
   
   return (
     <S.Main>
-      <FindSystemForm />
+      {/* <FindSystemForm />
       {systems && (
         <S.Table>
           <thead>
@@ -23,19 +24,16 @@ const FindSystem = () => {
           <tbody>
             {systems.map((system) => (
               <SystemCard
-                description={system.description}
-                acronym={system.acronym}
-                systemEmail={system.systemEmail}
-                status={system.status}
-                url={system.url}
+                system={system}
                 key={system.id}
               />
             ))}
           </tbody>
         </S.Table>
-      )}
+      )} */}
+      <Outlet/>
     </S.Main>
   );
 };
 
-export default FindSystem;
+export default Home;

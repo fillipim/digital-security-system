@@ -1,16 +1,8 @@
 import styled from "styled-components";
 
-export const Main = styled.main`
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
-
 export const Table = styled.table`
-  width: 600px;
-  border-collapse: collapse;
+    border-collapse: collapse;
+    margin: 1rem auto;
   th {
     background-color: ${({ theme }) => theme.colors.brand[200]};
     padding: 0.5rem;
