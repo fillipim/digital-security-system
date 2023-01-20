@@ -20,10 +20,14 @@ export interface ISystem {
   justificationChange: string | null;
 }
 
+export interface ISystemResponse {
+  total: number,
+  systems: ISystem[]
+}
+
 export interface ISystemContext {
-  systems: ISystem[] | null;
-  setSystems: React.Dispatch<React.SetStateAction<ISystem[] | null >>;
-  // handleSearchData: (searchData: ISearchSystem) => void;
+  systems: ISystemResponse | null;
+  setSystems: React.Dispatch<React.SetStateAction<ISystemResponse | null >>;
   createSystem: (data: ICreateSystem) => void;
   currentSystem: ISystem;
   setCurrentSystem: React.Dispatch<React.SetStateAction<ISystem>>;
@@ -33,7 +37,7 @@ export interface ISystemContext {
   setSearchData: React.Dispatch<React.SetStateAction<ISearchSystem | null>>;
   offset: number;
   setOffset: React.Dispatch<React.SetStateAction<number>>;
-  findSystems: () => void;
+  findSystems: (data: ISearchSystem) => void;
 }
 
 export interface ICardSystem {
