@@ -53,25 +53,21 @@ const SystemProvider = ({ children }: ISystemContextProps) => {
       await api.post("/systems", data);
       toast.success("Operação realizada com sucesso.");
     } catch (error: any) {
-      console.error(error);  
-      error = JSON.stringify(error)
+      console.error(error);
+      error = JSON.stringify(error);
       toast.error(JSON.parse(error).errors[0]);
     }
   };
 
   const updateSystem = async (payload: IUpdateSystem) => {
     try {
-      updateSystemSchema
-        .validate(payload)
-        .catch((err) => toast.error("Dados obrigatórios não informados."));
+      await updateSystemSchema.validate({ ...payload, updatedAt: new Date() });
 
-      api.patch(`/systems/${currentSystem.id}`, {
-        ...payload,
-        updatedAt: new Date(),
-      });
+      await api.patch(`/systems/${currentSystem.id}`, payload);
+      toast.success("Operação realizada com sucesso.");
     } catch (error: any) {
-      console.error(error);  
-      error = JSON.stringify(error)
+      console.error(error);
+      error = JSON.stringify(error);
       toast.error(JSON.parse(error).errors[0]);
     }
   };
