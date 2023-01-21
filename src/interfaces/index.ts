@@ -51,7 +51,8 @@ export interface ICardSystem {
 export interface ICreateSystem {
   description: string;
   acronym: string;
-  systemEmail?: string;
+  systemEmail?: string | null;
+  url?: string | null
 }
 
 export interface IUpdateSystem {
