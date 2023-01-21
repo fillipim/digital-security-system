@@ -38,7 +38,7 @@ const SystemProvider = ({ children }: ISystemContextProps) => {
           "Nenhum Sistema foi encontrado. Favor revisar os critérios da sua pesquisa"
         );
       }
-      setSystems(data);
+     searchData && setSystems(data);
     } catch (error) {
       console.error(error);
     }
