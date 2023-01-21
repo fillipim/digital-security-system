@@ -1,1 +1,1 @@
-export const baseUrl = "http://localhost:3001"
+export const baseUrl = "https://digital-security-system-api.onrender.com"

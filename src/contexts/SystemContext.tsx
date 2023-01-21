@@ -7,6 +7,7 @@ import {
   ISystem,
   ISystemContext,
   ISystemContextProps,
+  ISystemResponse,
   IUpdateSystem,
 } from "../interfaces";
 import {
@@ -19,42 +20,44 @@ import api from "../services/api";
 const SystemContext = createContext({} as ISystemContext);
 
 const SystemProvider = ({ children }: ISystemContextProps) => {
-  const [systems, setSystems] = useState<ISystem[] | null>(null);
-  const [offset, setOffset] = useState<number >(0);
+  const [systems, setSystems] = useState<ISystemResponse | null>(null);
+  const [offset, setOffset] = useState<number>(0);
   const [currentSystem, setCurrentSystem] = useState<ISystem>({} as ISystem);
-  const [searchData, setSearchData] = useState<ISearchSystem | null>(null)
+  const [searchData, setSearchData] = useState<ISearchSystem | null>(null);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const findSystems = async () => {
-    const response = await api
-      .get("/systems", { params: { ...searchData, offset: offset } })
-      .then((res) => res.data)
-      .catch((err) => err);
-
-    if (response.length === 0) {
-      toast.success(
-        "Nenhum Sistema foi encontrado. Favor revisar os critérios da sua pesquisa"
-      );
+  const findSystems = async (_data: ISearchSystem) => {
+    setSearchData(_data)
+    try {
+      const { data } = await api.get("/systems", {
+        params: { ..._data, offset: offset },
+      });
+      if (data.systems.length === 0) {
+        toast.success(
+          "Nenhum Sistema foi encontrado. Favor revisar os critérios da sua pesquisa"
+        );
+      }
+     searchData && setSystems(data);
+    } catch (error) {
+      console.error(error);
     }
-
-    setSystems(response);
   };
 
   useEffect(() => {
-    findSystems()
-  },[offset])
+    findSystems(searchData as ISearchSystem);
+  }, [offset]);
 
   const createSystem = async (data: ICreateSystem) => {
-    await createSystemSchema
-      .validate(data)
-      .catch((err) => toast.error("Dados obrigatórios não informados."));
-
+    
     try {
+      await createSystemSchema
+        .validate(data)
       await api.post("/systems", data);
       toast.success("Operação realizada com sucesso.");
     } catch (error) {
       console.error(error);
+      toast.error("Dados obrigatórios não informados.")
     }
   };
 
@@ -76,8 +79,8 @@ const SystemProvider = ({ children }: ISystemContextProps) => {
   };
 
   const backToHome = () => {
-    navigate("/")
-  }
+    navigate("/");
+  };
 
   return (
     <SystemContext.Provider
@@ -93,7 +96,7 @@ const SystemProvider = ({ children }: ISystemContextProps) => {
         setSearchData,
         offset,
         setOffset,
-        findSystems
+        findSystems,
       }}
     >
       {children}

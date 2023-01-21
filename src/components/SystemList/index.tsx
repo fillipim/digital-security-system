@@ -4,11 +4,10 @@ import FindSystemForm from "../SearchSystemForm";
 import SystemCard from "../systemCard";
 import * as S from "./systemList.style";
 import { Text } from "../../styles/typography";
+import Pagination from "../Pagination";
 
 const SystemList = () => {
-  const { systems } = useSystemContext();
-  console.log(systems);
-  
+  const { systems, offset } = useSystemContext();
   
   return (
     <Container>
@@ -30,12 +29,13 @@ const SystemList = () => {
                 </tr>
               </thead>
               <tbody>
-                { systems.map((system) => (
+                { systems.systems.map((system) => (
                   <SystemCard system={system} key={system.id} />
                 ))}
               </tbody>
             </S.Table>
           </div>
+          <Pagination offset={offset} total={systems.total}/>
         </FieldBox>
       )}
     </Container>
