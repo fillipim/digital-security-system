@@ -1,0 +1,1 @@
+export const baseUrl = "https://digital-security-system-api.onrender.com"
