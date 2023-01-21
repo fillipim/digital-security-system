@@ -10,10 +10,7 @@ import {
   ISystemResponse,
   IUpdateSystem,
 } from "../interfaces";
-import {
-  createSystemSchema,
-  validateEmail,
-} from "../schemas/createSystem.schema";
+import { createSystemSchema } from "../schemas/createSystem.schema";
 import { updateSystemSchema } from "../schemas/updateSystem.schema";
 import api from "../services/api";
 
@@ -28,7 +25,7 @@ const SystemProvider = ({ children }: ISystemContextProps) => {
   const navigate = useNavigate();
 
   const findSystems = async (_data: ISearchSystem) => {
-    setSearchData(_data)
+    setSearchData(_data);
     try {
       const { data } = await api.get("/systems", {
         params: { ..._data, offset: offset },
@@ -38,7 +35,7 @@ const SystemProvider = ({ children }: ISystemContextProps) => {
           "Nenhum Sistema foi encontrado. Favor revisar os critérios da sua pesquisa"
         );
       }
-     searchData && setSystems(data);
+      searchData && setSystems(data);
     } catch (error) {
       console.error(error);
     }
@@ -49,33 +46,34 @@ const SystemProvider = ({ children }: ISystemContextProps) => {
   }, [offset]);
 
   const createSystem = async (data: ICreateSystem) => {
-    
+    console.log(data);
+
     try {
-      await createSystemSchema
-        .validate(data)
+      await createSystemSchema.validate(data);
       await api.post("/systems", data);
       toast.success("Operação realizada com sucesso.");
-    } catch (error) {
-      console.error(error);
-      toast.error("Dados obrigatórios não informados.")
+    } catch (error: any) {
+      console.error(error);  
+      error = JSON.stringify(error)
+      toast.error(JSON.parse(error).errors[0]);
     }
   };
 
-  const updateSystem = (payload: IUpdateSystem) => {
-    updateSystemSchema
-      .validate(payload)
-      .catch((err) => toast.error("Dados obrigatórios não informados."));
+  const updateSystem = async (payload: IUpdateSystem) => {
+    try {
+      updateSystemSchema
+        .validate(payload)
+        .catch((err) => toast.error("Dados obrigatórios não informados."));
 
-    if (payload.systemEmail) {
-      validateEmail
-        .validate(payload.systemEmail)
-        .catch((err) => toast.error("Email inválido!"));
+      api.patch(`/systems/${currentSystem.id}`, {
+        ...payload,
+        updatedAt: new Date(),
+      });
+    } catch (error: any) {
+      console.error(error);  
+      error = JSON.stringify(error)
+      toast.error(JSON.parse(error).errors[0]);
     }
-
-    api.patch(`/systems/${currentSystem.id}`, {
-      ...payload,
-      updatedAt: new Date(),
-    });
   };
 
   const backToHome = () => {

@@ -35,7 +35,7 @@ const SystemList = () => {
               </tbody>
             </S.Table>
           </div>
-          <Pagination offset={offset} total={systems.total}/>
+          {systems.systems.length === 10 && <Pagination offset={offset} total={systems.total}/>}
         </FieldBox>
       )}
     </Container>
