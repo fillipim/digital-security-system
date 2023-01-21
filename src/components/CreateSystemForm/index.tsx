@@ -9,15 +9,12 @@ import { FaFolderPlus, FaArrowLeft } from "react-icons/fa";
 import * as S from "../SearchSystemForm/searchSystemForm.style";
 import { createSystemSchema } from "../../schemas/createSystem.schema";
 import { ICreateSystem } from "../../interfaces";
-import { useNavigate } from "react-router-dom";
 import { Container, FieldBox } from "../Container/container.style";
 
 const CreateSystemForm = () => {
   const { createSystem, backToHome } = useSystemContext();
 
-  const { register, handleSubmit } = useForm<ICreateSystem>({
-    resolver: yupResolver(createSystemSchema),
-  });
+  const { register, handleSubmit} = useForm<ICreateSystem>();
 
   return (
     <Container>
@@ -41,11 +38,15 @@ const CreateSystemForm = () => {
             E-mail de atendimento do sistema:
             <Input type="text" {...register("systemEmail")} />
           </label>
+          <label>
+            URL:
+            <Input type="text" {...register("url")} />
+          </label>
           <S.BoxButtons content="space-between">
             <button onClick={backToHome}>
               <FaArrowLeft />
             </button>
-            <button>
+            <button type="submit">
               Salvar <FaFolderPlus />
             </button>
           </S.BoxButtons>
